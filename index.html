@@ -11,8 +11,8 @@
   <style>
     /* 슬라이더의 최대 너비나 높이 등을 지정할 수 있습니다. */
     .swiper {
-      width: 900px;      /* 원하는 너비로 변경 */
-      height: 900px;     /* 원하는 높이로 변경 */
+      width: 900px;     /* 원하는 너비로 변경 */
+      height: 900px;    /* 원하는 높이로 변경 */
       margin: 200px auto 0; /* 가운데 정렬, 위쪽 200px 여백 */
     }
 
@@ -24,27 +24,25 @@
     }
 
     /* ------------------------------------
-       두 번째 슬라이드에서만 사용되는
-       'img-container' + 'link-box' 스타일
+       2번 슬라이드(목차)에서만 쓸 스타일
        ------------------------------------ */
     .img-container {
       position: relative; /* 자식 absolute 배치를 위한 부모 설정 */
-      width: 100%;        /* 슬라이드와 동일한 너비(100%) */
-      height: 100%;       /* 슬라이드와 동일한 높이(100%) */
-      overflow: hidden;   /* 필요 시 숨김 처리 */
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
-
     /* 클릭/터치 영역을 덮는 투명 박스 */
     .link-box {
       position: absolute;
       cursor: pointer;
-      /* 테스트 시 영역 확인을 위해 임시 색상 */
+      /* 디버깅용 임시 배경색 (실제 배포 시 제거) */
       /* background: rgba(255, 0, 0, 0.2); */
     }
-    /* .item1 ~ .item9: 예시 좌표 (수정 필요) */
+    /* 아래 좌표들은 예시입니다. 실제 목차 위치에 맞춰 조절하세요 */
     .item1 {
-      left: 10%;   /* 슬라이드 전체 폭 대비 10% 지점 */
-      top: 10%;    /* 슬라이드 전체 높이 대비 10% 지점 */
+      left: 10%;
+      top: 10%;
       width: 25%;
       height: 5%;
     }
@@ -104,30 +102,31 @@
     <!-- 추가 옵션(레이어)을 감싸는 'swiper-wrapper' -->
     <div class="swiper-wrapper">
 
-      <!-- 1번 슬라이드 -->
+      <!-- 1번 슬라이드(인덱스 0) -->
       <div class="swiper-slide">
         <img src="001.png" alt="image1" />
       </div>
 
-      <!-- 2번 슬라이드(목차 이미지 위에 클릭 영역 9개) -->
+      <!-- 2번 슬라이드(인덱스 1) - 목차 클릭 영역 9개 -->
       <div class="swiper-slide">
         <div class="img-container">
-          <!-- 실제 배경 이미지(목차) -->
+          <!-- 실제 배경(목차) 이미지 -->
           <img src="002.png" alt="image2" />
-          <!-- 각 항목을 덮는 투명 링크 박스(예시 9개) -->
-          <a class="link-box item1" href="003.png" title="003으로 이동"></a>
-          <a class="link-box item2" href="004.png" title="004으로 이동"></a>
-          <a class="link-box item3" href="005.png" title="005으로 이동"></a>
-          <a class="link-box item4" href="006.png" title="006으로 이동"></a>
-          <a class="link-box item5" href="007.png" title="007으로 이동"></a>
-          <a class="link-box item6" href="008.png" title="008으로 이동"></a>
-          <a class="link-box item7" href="009.png" title="009으로 이동"></a>
-          <a class="link-box item8" href="010.png" title="010으로 이동"></a>
-          <a class="link-box item9" href="011.png" title="011으로 이동"></a>
+          
+          <!-- 각 영역 클릭 시 swiper.slideTo()로 이동할 인덱스 지정 -->
+          <div class="link-box item1" data-target-slide="2" title="3번 슬라이드로 이동"></div>
+          <div class="link-box item2" data-target-slide="3" title="4번 슬라이드로 이동"></div>
+          <div class="link-box item3" data-target-slide="4" title="5번 슬라이드로 이동"></div>
+          <div class="link-box item4" data-target-slide="5" title="6번 슬라이드로 이동"></div>
+          <div class="link-box item5" data-target-slide="6" title="7번 슬라이드로 이동"></div>
+          <div class="link-box item6" data-target-slide="7" title="8번 슬라이드로 이동"></div>
+          <div class="link-box item7" data-target-slide="8" title="9번 슬라이드로 이동"></div>
+          <div class="link-box item8" data-target-slide="9" title="10번 슬라이드로 이동"></div>
+          <div class="link-box item9" data-target-slide="10" title="11번 슬라이드로 이동"></div>
         </div>
       </div>
 
-      <!-- 3~11번 슬라이드 -->
+      <!-- 3번~11번 슬라이드 (인덱스 2~10) -->
       <div class="swiper-slide">
         <img src="003.png" alt="image3" />
       </div>
@@ -192,6 +191,16 @@
 
       // 드래그로 스와이프가 가능하게 할지 설정
       simulateTouch: true,
+    });
+
+    // .link-box를 모두 찾아서 클릭 시 해당 슬라이드로 이동
+    document.querySelectorAll('.link-box').forEach((elem) => {
+      elem.addEventListener('click', () => {
+        // data-target-slide="숫자" → 정수로 변환
+        const targetIndex = parseInt(elem.getAttribute('data-target-slide'), 10);
+        // 해당 인덱스 슬라이드로 이동 (0.5초 = 500ms)
+        swiper.slideTo(targetIndex, 500);
+      });
     });
   </script>
 </body>
