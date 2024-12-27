@@ -8,11 +8,6 @@
     rel="stylesheet"
     href="https://unpkg.com/swiper@9/swiper-bundle.min.css"
   />
-  <!-- viewport 설정: 사용자 확대/축소 허용 -->
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes"
-  />
   <style>
     /* 슬라이더의 최대 너비나 높이 등을 지정할 수 있습니다. */
     .swiper {
@@ -29,7 +24,7 @@
     }
 
     /* ------------------------------------
-       2번 슬라이드(목차)에서만 쓰는 스타일
+       2번 슬라이드(목차)에서만 쓸 스타일
        ------------------------------------ */
     .img-container {
       position: relative; /* 자식 absolute 배치를 위한 부모 설정 */
@@ -37,16 +32,14 @@
       height: 100%;
       overflow: hidden;
     }
-
-    /* 클릭/터치 영역을 덮는 투명 박스 (목차 링크) */
+    /* 클릭/터치 영역을 덮는 투명 박스 */
     .link-box {
       position: absolute;
       cursor: pointer;
-      /* 디버깅용: 
-         background: rgba(255, 0, 0, 0.2); // 필요 시 주석 해제 */
+      /* 디버깅용 임시 배경색 (실제 배포 시 제거) */
+      /* background: rgba(255, 0, 0, 0.2); */
     }
-
-    /* 각 목차 아이템 위치 (예시) */
+    /* 아래 좌표들은 예시입니다. 실제 목차 위치에 맞춰 조절하세요 */
     .item1 {
       left: 5.5%;
       top: 18%;
@@ -102,13 +95,13 @@
       height: 6%;
     }
 
-    /* "목차로 이동" 버튼 스타일 (크기 키움) */
+    /* 아래는 추가 버튼(2페이지로 가는 버튼)을 위한 간단 스타일 */
     .go-to-page-btn {
       display: block;
-      width: 500px;           /* 버튼 너비 크게 */
-      margin: 30px auto;      /* 가운데 정렬 */
-      padding: 20px;          /* 세로 두께 크게 */
-      font-size: 20px;        /* 폰트 크기 크게 */
+      width: 500px;
+      margin: 30px auto; /* 가운데 정렬 */
+      padding: 10px;
+      font-size: 16px;
       text-align: center;
       background-color: #007bff;
       color: #fff;
@@ -125,7 +118,7 @@
 <body>
   <!-- Swiper 메인 컨테이너 -->
   <div class="swiper">
-    <!-- 전체 슬라이드를 감싸는 swiper-wrapper -->
+    <!-- 추가 옵션(레이어)을 감싸는 'swiper-wrapper' -->
     <div class="swiper-wrapper">
 
       <!-- 1번 슬라이드(인덱스 0) -->
@@ -138,6 +131,7 @@
         <div class="img-container">
           <!-- 실제 배경(목차) 이미지 -->
           <img src="002.png" alt="image2" />
+          
           <!-- 각 영역 클릭 시 swiper.slideTo()로 이동할 인덱스 지정 -->
           <div class="link-box item1" data-target-slide="2" title="3번 슬라이드로 이동"></div>
           <div class="link-box item2" data-target-slide="3" title="4번 슬라이드로 이동"></div>
@@ -181,14 +175,14 @@
       </div>
 
     </div>
-    <!-- 페이지네이션(하단 동그라미) -->
+    <!-- 페이지네이션 -->
     <div class="swiper-pagination"></div>
-    <!-- 이전/다음 버튼 -->
+    <!-- 네비게이션 버튼 -->
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
   </div>
 
-  <!-- 하단에 "목차로 이동" 버튼 (2페이지=인덱스1) -->
+  <!-- 하단에 "2페이지로 이동" 버튼 추가 -->
   <button class="go-to-page-btn" id="go-to-page-btn">목차로 이동</button>
 
   <!-- Swiper JS -->
@@ -221,17 +215,20 @@
       simulateTouch: true,
     });
 
-    // 각 목차 영역 클릭 시 특정 슬라이드로 이동
+    // .link-box를 모두 찾아서 클릭 시 해당 슬라이드로 이동
     document.querySelectorAll('.link-box').forEach((elem) => {
       elem.addEventListener('click', () => {
+        // data-target-slide="숫자" → 정수로 변환
         const targetIndex = parseInt(elem.getAttribute('data-target-slide'), 10);
+        // 해당 인덱스 슬라이드로 이동 (0.5초 = 500ms)
         swiper.slideTo(targetIndex, 500);
       });
     });
 
-    // "목차로 이동" 버튼 (2번 슬라이드 = 인덱스1)
+    // "2페이지로 이동" 버튼 클릭 이벤트
     const goToPageBtn = document.getElementById('go-to-page-btn');
     goToPageBtn.addEventListener('click', () => {
+      // 2번 슬라이드 = 인덱스 1
       swiper.slideTo(1, 500);
     });
   </script>
